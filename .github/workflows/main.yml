@@ -1,0 +1,32 @@
+name: CI/CD
+
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./src
+          file: ./src/Dockerfile
+          push: true
+          tags: |
+            vtgdias/rotten-potatoes:latest
+            # Seta como tag o contator de execucao do github actions para esse projeto
+            vtgdias/rotten-potatoes:${{ github.run_number }}
