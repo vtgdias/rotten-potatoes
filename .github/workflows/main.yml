@@ -28,5 +28,4 @@ jobs:
           push: true
           tags: |
             vtgdias/rotten-potatoes:latest
-            # Seta como tag o contator de execucao do github actions para esse projeto
             vtgdias/rotten-potatoes:${{ github.run_number }}
