@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest
     
     steps:
@@ -29,3 +29,23 @@ jobs:
           tags: |
             vtgdias/rotten-potatoes:latest
             vtgdias/rotten-potatoes:${{ github.run_number }}
+            
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1.1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+      
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v1.3
+        with:
+          images: |
+            vtgdias/rotten-potatoes:${{ github.run_number }}
+          manifests: |
+            k8s/deployment.yaml
+    
