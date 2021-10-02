@@ -35,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - uses: actions/checkout@v2
+    
       - name: Kubernetes set context
         uses: Azure/k8s-set-context@v1.1
         with:
@@ -44,8 +46,7 @@ jobs:
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v1.3
         with:
-          images: |
-            vtgdias/rotten-potatoes:${{ github.run_number }}
+          images: vtgdias/rotten-potatoes:${{ github.run_number }}
           manifests: |
-            ../k8s/deployment.yaml
+            k8s/deployment.yaml
     
