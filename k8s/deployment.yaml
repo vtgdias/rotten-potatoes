@@ -17,12 +17,12 @@ spec:
       - name: mongodb
         image: mongo:4.4.6
         ports:
-          containerPort:27017
+        - containerPort: 27017
         env:
-          - name: MONGO_INITDB_ROOT_USERNAME
-            value: mongouser
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            value: mongopwd
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: mongouser
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: mongopwd
 ---
 # Service do MongoDB
 apiVersion: v1
@@ -33,7 +33,7 @@ spec:
   selector:
     app: mongodb
   ports:
-    - port: 27017
+  - port: 27017
   type: ClusterIP
 ---
 # Deployment da aplicacao web
@@ -52,21 +52,21 @@ spec:
         app: web
     spec:
       containers:
-        - name: web
+      - name: web
         image: vtgdias/rotten-potatoes:v1
         ports:
-          containerPort:5000
-  env:
-    - name: MONGODB_DB
-      value: "admin"
-    - name: MONGODB_HOST
-      value: "mongodb"
-    - name: MONGODB_PORT
-      value: "27017"
-    - name: MONGODB_USERNAME
-      value: "mongouser"
-    - name: MONGODB_PASSWORD
-      value: "mongopwd"
+        - containerPort: 5000
+        env:
+        - name: MONGODB_DB
+          value: "admin"
+        - name: MONGODB_HOST
+          value: "mongodb"
+        - name: MONGODB_PORT
+          value: "27017"
+        - name: MONGODB_USERNAME
+          value: "mongouser"
+        - name: MONGODB_PASSWORD
+          value: "mongopwd"
 ---
 # Service da aplicacao web
 apiVersion: v1
@@ -77,7 +77,7 @@ spec:
   selector:
     app: web
   ports:
-    - port: 80
+  - port: 80
     targetPort: 5000
     nodePort: 30000
 type: LoadBalancer
